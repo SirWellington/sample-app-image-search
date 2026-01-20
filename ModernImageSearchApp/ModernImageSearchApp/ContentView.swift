@@ -12,7 +12,7 @@ struct ContentView: View {
         VStack {
             Text("Hello, world!")
                 .font(.title)
-            Spacer()
+            
             Image(systemName: "globe")
                 .imageScale(.large)
                 .foregroundStyle(.tint)
