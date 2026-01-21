@@ -8,6 +8,7 @@
 import UIKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
+    private var coordinator: Coordinator?
 
     var window: UIWindow?
 
@@ -21,12 +22,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let windowScene = (scene as? UIWindowScene) else { return }
         let window = UIWindow(windowScene: windowScene)
-        
-        let mainVC = MainVC()
-        window.rootViewController = mainVC
-        window.makeKeyAndVisible()
-        
         self.window = window
+        
+        coordinator = Coordinator(window: window)
+        coordinator?.start()
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
