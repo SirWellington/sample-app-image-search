@@ -1,0 +1,15 @@
+//
+//  Base.xcconfig
+//  ModernImageSearchUIKit
+//
+//  Created by Wellington Moreno on 1/21/26.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://developer.apple.com/documentation/xcode/adding-a-build-configuration-file-to-your-project
+
+#include "Secrets.xcconfig"
+
+// Base settings shared across configs
+SWIFT_VERSION = 5.9
+IPHONEOS_DEPLOYMENT_TARGET = 16.0

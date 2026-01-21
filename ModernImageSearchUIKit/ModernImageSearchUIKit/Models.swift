@@ -8,6 +8,7 @@
 import Foundation
 
 struct Image {
+    let id: String
     let fullSizeURL: URL
     let thumbnailURL: URL
     let size: CGSize

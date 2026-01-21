@@ -29,3 +29,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 }
 
+//======================================
+// MARK: App Secrets
+//======================================
+enum AppSecrets {
+    static var pexelsApiKey: String {
+        guard let key = Bundle.main.object(forInfoDictionaryKey: "PEXELS_API_KEY") as? String else {
+            fatalError("PEXELS_API_KEY missing. Check Secrets.xcconfig / build settings.")
+        }
+        guard !key.isEmpty, !key.contains("$(") else {
+            fatalError("PEXELS_API_KEY missing.")
+        }
+        return key
+    }
+}

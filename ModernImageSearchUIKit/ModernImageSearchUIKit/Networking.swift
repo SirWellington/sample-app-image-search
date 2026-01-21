@@ -24,6 +24,7 @@ struct ImageSearchRequest {
 struct ImageSearchResponse {
     var images: [Image] = []
     var nextPage: Int? = nil
+    var totalResults: Int = 0
 }
 
 enum NetworkingError: Error {
@@ -42,6 +43,7 @@ class PexelsAPI: ImageSearchAPI {
     
     init(session: URLSession = .shared) {
         self.session = session
+        jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
     }
     
     func searchImages(
@@ -68,6 +70,12 @@ class PexelsAPI: ImageSearchAPI {
             throw NetworkingError.operationError(
                 message: "did not receive http response"
             )
+        }
+        
+        guard http.statusCode == 200 else {
+            let message = "w: HTTP Status code is \(http.statusCode)"
+            print(message)
+            throw NetworkingError.operationError(message: message)
         }
         
         let pexelsResponse: PexelsSearchResponse
@@ -118,7 +126,7 @@ extension PexelsAPI {
         let nextPage: String
         
         struct PexelPhoto: Codable {
-            let id: String
+            let id: Int
             let height: Int
             let width: Int
             let photographer: String
@@ -136,14 +144,6 @@ extension PexelsAPI {
                 let landscape: String
                 let tiny: String
             }
-        }
-        
-        enum CodingKeys: String, CodingKey {
-            case page
-            case perPage = "per_page"
-            case photos
-            case totalResults = "total_results"
-            case nextPage = "next_page"
         }
     }
 }
@@ -176,6 +176,10 @@ extension PexelsAPI {
                 }
                 var request = URLRequest(url: url)
                 request.httpMethod = "GET"
+                request.addValue(
+                    AppSecrets.pexelsApiKey,
+                    forHTTPHeaderField: "Authorization"
+                )
                 return request
             }
         }
@@ -190,12 +194,14 @@ extension ImageSearchResponse {
         images = pexels.photos.compactMap {
             Image($0)
         }
+        totalResults = pexels.totalResults
     }
 }
 extension Image {
     init?(_ pexels: PexelsAPI.PexelsSearchResponse.PexelPhoto) {
         guard let smallUrl = URL(string: pexels.src.small) else { return nil }
         guard let fullUrl = URL(string: pexels.src.original) else { return nil }
+        id = String(pexels.id)
         thumbnailURL = smallUrl
         fullSizeURL = fullUrl
         size = CGSize(
