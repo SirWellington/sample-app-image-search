@@ -105,7 +105,7 @@ extension MainVC: UISearchBarDelegate {
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         actionHandler?(
-            .didEditSearchBar(
+            .didTapSearch(
                 text: searchBar.text
             )
         )

@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Image {
+struct Image: Equatable{
     let id: String
     let fullSizeURL: URL
     let thumbnailURL: URL

@@ -13,6 +13,52 @@ extension UIView {
         view.translatesAutoresizingMaskIntoConstraints = false
         addSubview(view)
     }
+    
+    func constraintsPinningTo(
+        _ view: UIView,
+        safeArea: Bool = false,
+        offset: CGFloat = 0
+    ) -> [NSLayoutConstraint] {
+        if safeArea {
+            return [
+                topAnchor.constraint(
+                    equalTo: view.safeAreaLayoutGuide.topAnchor,
+                    constant: offset
+                ),
+                leadingAnchor.constraint(
+                    equalTo: view.safeAreaLayoutGuide.leadingAnchor,
+                    constant: offset
+                ),
+                trailingAnchor.constraint(
+                    equalTo: view.safeAreaLayoutGuide.trailingAnchor,
+                    constant: -offset
+                ),
+                bottomAnchor.constraint(
+                    equalTo: view.safeAreaLayoutGuide.bottomAnchor,
+                    constant: -offset
+                )
+            ]
+        } else {
+            return [
+                topAnchor.constraint(
+                    equalTo: view.topAnchor,
+                    constant: offset
+                ),
+                leadingAnchor.constraint(
+                    equalTo: view.leadingAnchor,
+                    constant: offset
+                ),
+                trailingAnchor.constraint(
+                    equalTo: view.trailingAnchor,
+                    constant: -offset
+                ),
+                bottomAnchor.constraint(
+                    equalTo: view.bottomAnchor,
+                    constant: -offset
+                )
+            ]
+        }
+    }
 }
 extension UIStackView {
     convenience init(
