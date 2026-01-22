@@ -199,7 +199,7 @@ extension ImageSearchResponse {
 }
 extension Image {
     init?(_ pexels: PexelsAPI.PexelsSearchResponse.PexelPhoto) {
-        guard let smallUrl = URL(string: pexels.src.small) else { return nil }
+        guard let smallUrl = URL(string: pexels.src.medium) else { return nil }
         guard let fullUrl = URL(string: pexels.src.original) else { return nil }
         id = String(pexels.id)
         thumbnailURL = smallUrl

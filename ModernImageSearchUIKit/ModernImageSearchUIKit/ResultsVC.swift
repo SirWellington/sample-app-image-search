@@ -140,7 +140,8 @@ extension ResultsVC {
         private func setupAndArrangeViews() {
             contentView.addAutolayoutSubview(imageView)
             imageView.image = nil
-            imageView.contentMode = .scaleAspectFit
+            imageView.contentMode = .scaleAspectFill
+            contentView.clipsToBounds = true
             NSLayoutConstraint.activate(
                 imageView.constraintsPinningTo(contentView)
             )
