@@ -59,6 +59,7 @@ private extension MainVC {
             alpha: 1
         )
         titleLabel.font = .preferredFont(forTextStyle: .title1)
+        searchBar.placeholder = Text.searchbarPlaceholder
     }
     
     func applyConstraints() {
@@ -118,5 +119,6 @@ extension MainVC {
     enum Text {
         static let title = "Image Search"
         static let subtitle = "Type something to beging searching for images."
+        static let searchbarPlaceholder = "Type to search…"
     }
 }

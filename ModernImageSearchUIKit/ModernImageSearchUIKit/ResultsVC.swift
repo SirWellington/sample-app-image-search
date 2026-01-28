@@ -8,11 +8,13 @@
 import Foundation
 import UIKit
 
-class ResultsVC: UIViewController {
+class ResultsVC: UIViewController    {
     private var collectionView: UICollectionView!
     private var dataSource: UICollectionViewDiffableDataSource<Section, ImageID>?
     private var orderedIDs: [ImageID] = []
     private var imageLookup: [ImageID: Image] = [:]
+    
+    var actionHandler: ActionHandler?
     var model = Model() {
         didSet {
             applyModel()
@@ -25,6 +27,7 @@ class ResultsVC: UIViewController {
         setupConstraints()
         applyModel()
     }
+    
 }
 
 //======================================
@@ -41,10 +44,6 @@ private extension ResultsVC {
             collectionViewLayout: layout
         )
         collectionView.delegate = self
-//        collectionView.autoresizingMask = [
-//            .flexibleWidth,
-//            .flexibleHeight
-//        ]
         collectionView.register(
             ImageCell.self,
             forCellWithReuseIdentifier: ImageCell.reusedID
@@ -85,6 +84,16 @@ private extension ResultsVC {
 }
 
 //======================================
+// MARK: Actions
+//======================================
+extension ResultsVC {
+    typealias ActionHandler = (Action) -> Void
+    
+    enum Action: Equatable {
+        case didSelectImage(Image)
+    }
+}
+//======================================
 // MARK: Model
 //======================================
 extension ResultsVC {
@@ -113,13 +122,26 @@ extension ResultsVC {
 //======================================
 // MARK: Collection View Methods
 //======================================
-extension ResultsVC {
+extension ResultsVC: UICollectionViewDelegate {
     enum Section: Int, CaseIterable {
         case main
     }
     typealias ImageID = String
+    
+    func collectionView(
+        _ collectionView: UICollectionView,
+        didSelectItemAt indexPath: IndexPath
+    ) {
+        guard let dataSource else { return }
+        guard let imageId = dataSource.itemIdentifier(for: indexPath) else { return }
+        guard let image = imageLookup[imageId] else { return }
+        actionHandler?(.didSelectImage(image))
+    }
 }
 
+//======================================
+// MARK: Image Cell
+//======================================
 extension ResultsVC {
     class ImageCell: UICollectionViewCell {
         static let reusedID: String = "ImageCell"

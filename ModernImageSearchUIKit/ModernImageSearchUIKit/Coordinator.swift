@@ -58,6 +58,13 @@ private extension Coordinator {
         }
     }
     
+    func handle(_ action: ResultsVC.Action) {
+        switch action {
+        case .didSelectImage(let image):
+            showImage(image)
+        }
+    }
+    
     func didTapSearch(text: String?) {
         guard let text, !text.isEmpty else { return }
         let request = ImageSearchRequest(query: text)
@@ -77,9 +84,18 @@ private extension Coordinator {
         }
     }
     
+    func showImage(_ image: Image) {
+        let imageViewerVC = ImageViewerVC()
+        imageViewerVC.model = ImageViewerVC.Model(image: image)
+        nav.pushViewController(imageViewerVC, animated: true)
+    }
+    
     @MainActor
     func didLoadSearch(_ response: ImageSearchResponse) {
         let resultsVC = ResultsVC()
+        resultsVC.actionHandler = { [weak self] in
+            self?.handle($0)
+        }
         self.resultsVC = resultsVC
         nav.pushViewController(resultsVC, animated: true)
         

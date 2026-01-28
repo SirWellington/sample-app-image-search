@@ -102,3 +102,25 @@ extension NSLayoutConstraint {
         NSLayoutConstraint.activate(Array(constraints))
     }
 }
+
+
+protocol ViewControllerSetup where Self: UIViewController {
+    func arrangeViews()
+    func applyStyles()
+    func applyConstraints()
+}
+
+extension ViewControllerSetup {
+    func setupView() {
+        arrangeViews()
+        applyStyles()
+        applyConstraints()
+    }
+}
+
+
+func apply<T>(_ elements: T..., closure: (T) -> Void) {
+    for element in elements {
+        closure(element)
+    }
+}
